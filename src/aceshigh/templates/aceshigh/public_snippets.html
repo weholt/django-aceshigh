@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Public Snippets{% endblock %}
+{% block content %}
+<div class="container my-5">
+    <div class="text-center mb-4">
+        <a href="{% url 'aceshigh:edit_profile' %}"><img src="{% static 'aceshigh/images/logo.png' %}" alt="AcesHigh Logo" style="max-width: 150px;"></a>
+        <h1 class="display-4 mt-3">Public Snippets</h1>
+        <p class="lead">Explore and download snippets shared by the community.</p>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <form method="get" class="mb-4">
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Search snippets..." name="q" value="{{ search_query }}">
+                    <button class="btn btn-outline-secondary" type="submit">Search</button>
+                </div>
+            </form>
+            <div class="tag-cloud mb-3">
+                {% for tag, count in tag_cloud.items %}
+                    <a href="?q={{ tag }}" class="badge badge-primary mx-2" style="font-size:16px;">{{ tag }}</a>
+                {% endfor %}
+            </div>
+            <ul class="list-group">
+                {% for snippet in snippets %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <div>
+                            <h5 class="mb-1">{{ snippet.title }}</h5>
+                            <small>{{ snippet.mode }}</small>
+                            <p class="mb-1">
+                                {% for tag in snippet.tags.all %}
+                                    <a href="?q={{ tag }}" class="badge badge-primary mx-2">{{ tag.name }}</a>
+                                {% endfor %}
+                            </p>
+                        </div>
+                        <a href="#" class="btn btn-outline-secondary btn-sm">Download</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}

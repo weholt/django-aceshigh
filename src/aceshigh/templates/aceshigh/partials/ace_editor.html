@@ -1,0 +1,152 @@
+{% if add_scripts %}{% include 'aceshigh/partials/scripts.html' %}{% endif %}
+<script>
+    var textarea_{{random_id}} = document.getElementById('{{ textarea_id }}');
+    textarea_{{random_id}}.style.display = 'none';
+
+    var aceDiv_{{random_id}} = document.createElement('div');
+    aceDiv_{{random_id}}.id = 'ace-editor-{{random_id}}';
+    aceDiv_{{random_id}}.style = `{{editor_css}}`;
+
+    // Insert the ACE editor div before the textarea
+    textarea_{{random_id}}.parentNode.insertBefore(aceDiv_{{random_id}}, textarea_{{random_id}});
+
+    var editor_{{random_id}} = ace.edit("ace-editor-{{random_id}}");
+    editor_{{random_id}}.setTheme("ace/theme/{{ theme }}");
+    editor_{{random_id}}.setFontSize({{ font_size }});
+    editor_{{random_id}}.session.setMode("ace/mode/{{ mode }}");
+
+    console.log("Editor mode: {{ mode }}");
+
+    editor_{{random_id}}.setOptions({
+        enableBasicAutocompletion: true,
+        enableLiveAutocompletion: true,
+        enableSnippets: true //{% if enable_snippets %}true{% else %}false{% endif %},
+    });
+    editor_{{random_id}}.getSession().setValue(textarea_{{random_id}}.value);
+    editor_{{random_id}}.getSession().on('change', function(){
+        textarea_{{random_id}}.value = editor_{{random_id}}.getSession().getValue();
+    });
+
+    {% if enable_snippets %}
+           
+    custom_completers = {
+    getCompletions: function(editor_{{random_id}}, session, pos, prefix, callback) {
+        var completions = [{% for mode, snippets in snippets_by_mode.items %}{% for snippet in snippets %}
+            {
+                caption: "{{ snippet.title }}",
+                snippet:  `{{ snippet.content|safe }}`,
+                meta: "snippet",
+                type: "snippet"
+            },{% endfor %}{% endfor %}
+        ];
+        callback(null, completions);
+    },
+        getDocTooltip: function(item) {
+            if (!item.docHTML) {
+                item.docHTML = [
+                    "<b>", item.caption, "</b>",
+                ].join("");
+            }
+        }
+    };
+    langTools.addCompleter(custom_completers);
+
+    {% endif %}
+
+    function toggleFullScreen() {
+        var editorElement = document.getElementById('ace-editor-{{random_id}}');
+        if (!document.fullscreenElement) {
+            editorElement.classList.add('fullscreen');
+            editorElement.requestFullscreen().then(() => {
+                editor_{{random_id}}.resize();
+            });
+        } else {
+            document.exitFullscreen().then(() => {
+                editorElement.classList.remove('fullscreen');
+                editor_{{random_id}}.resize();
+            });
+        }
+    }
+
+    document.addEventListener('fullscreenchange', () => {
+        var editorElement = document.getElementById('ace-editor-{{random_id}}');
+        if (!document.fullscreenElement) {
+            editorElement.classList.remove('fullscreen');
+            editor_{{random_id}}.resize();
+        }
+    });
+
+    document.addEventListener('keydown', (event) => {
+        if (event.ctrlKey && event.key === 'q') {
+            event.preventDefault(); // Prevent default browser behavior
+            toggleFullScreen();
+        }
+    });
+
+    editor_{{random_id}}.commands.addCommand({
+        name: "toggleFullscreen",
+        bindKey: {win: "Ctrl-Shift-F", mac: "Command-Shift-F"},
+        exec: function(editor) {
+            toggleFullScreen();
+        },
+        readOnly: false // false if this command should not apply in readOnly mode
+    });
+
+</script>
+
+<!--
+
+
+    
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ace Editor Custom Snippets Example</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/ace.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/ext-language_tools.js"></script>
+</head>
+<body>
+    <div id="editor" style="height: 300px; width: 600px;"></div>
+    <script>
+        // Initialize the Ace Editor
+        const editor = ace.edit("editor");
+        editor.setTheme("ace/theme/monokai");
+        editor.session.setMode("ace/mode/javascript");
+        editor.setOptions({
+            enableBasicAutocompletion: true,
+            enableSnippets: true,
+            enableLiveAutocompletion: true
+        });
+
+        editor.completers = [{
+    getCompletions: function(editor, session, pos, prefix, callback) {
+        var completions = [
+            {
+                caption: "my caption",
+                snippet: "content: '$1'",
+                meta: "snippet",
+                type: "snippet"
+            }, {
+                caption: "my value",
+                snippet: "t-field='$1' t-type='${2:string}'",
+                meta: "snippet",
+                type: "snippet"
+            }
+        ];
+        callback(null, completions);
+    },
+    getDocTooltip: function(item) {
+        if (!item.docHTML) {
+            item.docHTML = [
+                "<b>", item.caption, "</b>",
+            ].join("");
+        }
+    }
+}];
+    </script>
+</body>
+</html>
+
+
+-->

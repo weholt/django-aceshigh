@@ -1,0 +1,30 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "aceshigh"
+version = "0.1.0"
+description = "A Django app for integrating ACE editor into Django forms."
+authors = [
+    { name="Thomas Weholt", email="thomas@weholt.org" }
+]
+license = { text = "AGPL-3.0-or-later" }
+dependencies = [
+    "Django >= 5.0",
+    "djangorestframework",
+    "drf-yasg",
+    "django-crispy-forms",
+    "crispy-bootstrap5",
+    "django-taggit",
+]
+[project.optional-dependencies]
+dev = [
+    "pytest",
+    "pytest-django",
+    "isort",
+    "black",
+]
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "aceshigh.settings"

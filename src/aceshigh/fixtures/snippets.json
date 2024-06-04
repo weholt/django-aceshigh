@@ -1,0 +1,16 @@
+[
+    {
+        "title": "SOML",
+        "mode": "html",
+        "tags": ["html", "template"],
+        "snippet": "t-field='${1:t-field}' t-type='${2:t-type}'",
+        "public": true
+    },
+    {
+        "title": "Bootstrap Hero",
+        "mode": "html",
+        "tags": ["bootstrap", "hero"],
+        "snippet": "<div class='hero'><h1>Hero Title</h1><p>Hero description</p></div>",
+        "public": true
+    }
+]

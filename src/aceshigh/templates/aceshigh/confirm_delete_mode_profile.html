@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Confirm Delete{% endblock %}
+{% block content %}
+<div class="container my-5">
+    <div class="text-center mb-4">
+        <a href="{% url 'aceshigh:edit_profile' %}"><img src="{% static 'aceshigh/images/logo.png' %}" alt="AcesHigh Logo" style="max-width: 150px;"></a>
+        <h1 class="display-4 mt-3">AcesHigh Editor Profile</h1>
+        <p class="lead">Customize your editing experience with ACE Editor settings.</p>
+    </div>
+
+    <h2>Are you sure you want to delete "{{ mode_profile.mode }}"?</h2>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Delete</button>
+        <a href="{% url 'aceshigh:edit_profile' %}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+{% endblock %}

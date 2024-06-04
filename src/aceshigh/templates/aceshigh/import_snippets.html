@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Import Snippets{% endblock %}
+{% block content %}
+<div class="container my-5">
+    <div class="text-center mb-4">
+        <a href="{% url 'aceshigh:edit_profile' %}"><img src="{% static 'aceshigh/images/logo.png' %}" alt="AcesHigh Logo" style="max-width: 150px;"></a>
+        <h1 class="display-4 mt-3">AcesHigh Editor Profile</h1>
+        <p class="lead">Customize your editing experience with ACE Editor settings.</p>
+    </div>
+
+    <h2>Import Snippets</h2>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="file" class="form-label">Select JSON file</label>
+            <input type="file" class="form-control" id="file" name="file" accept=".json">
+        </div>
+        <div class="text-end">
+            <button type="submit" class="btn btn-primary">Import</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

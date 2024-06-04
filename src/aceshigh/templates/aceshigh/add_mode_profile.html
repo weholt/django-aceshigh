@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block title %}Add Mode Profile{% endblock %}
+{% block content %}
+<div class="container my-5">
+    <div class="text-center mb-4">
+        <a href="{% url 'aceshigh:edit_profile' %}"><img src="{% static 'aceshigh/images/logo.png' %}" alt="AcesHigh Logo" style="max-width: 150px;"></a>
+        <h1 class="display-4 mt-3">AcesHigh Editor Profile</h1>
+        <p class="lead">Customize your editing experience with ACE Editor settings.</p>
+    </div>
+    <h2>Add Mode Profile</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <div class="text-end">
+            <button type="submit" class="btn btn-success">Save</button>
+        </div>
+    </form>
+</div>
+{% endblock %}
