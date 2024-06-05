@@ -35,11 +35,16 @@ class BaseAceEditorWidget(forms.Textarea):
                         .then(configurations => {{
                             var editorDiv = document.getElementById("editor_{editor_id}");
                             var textarea = document.getElementById("{editor_id}");
-                            textarea.style.display = 'none'; // Hide the original textarea
+                            textarea.style.position = 'absolute';
+                            textarea.style.left = '-9999px';
 
                             var editor = ace.edit(editorDiv);
                             var mode = "{self.mode}";
                             var config = configurations[mode] || configurations['default'] || {{}};
+                            textarea.style.left = '-9999px';
+                            editor.getSession().on('change', function(){{
+                                textarea.value = (editor.getSession().getValue());
+                            }});
 
                             editor.session.setMode(`ace/mode/${{mode}}`);
                             editor.setTheme(config.theme || 'ace/theme/github');

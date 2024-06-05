@@ -2,7 +2,6 @@ from django.http import JsonResponse
 
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from django.urls import reverse
 from django.http import HttpResponse, JsonResponse
 from django.db.models import Count
 from .models import EditorProfile, EditorSnippet, EditorModeProfile
@@ -208,6 +207,6 @@ def get_editor_configurations(request):
             'style': mode_profile.editor_css
         }
 
-    import pprint
-    pprint.pprint(editor_configurations)
+    #import pprint
+    #pprint.pprint(editor_configurations)
     return JsonResponse(editor_configurations)

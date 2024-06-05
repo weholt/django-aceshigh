@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth import get_user_model
 from taggit.managers import TaggableManager
+from aceshigh.fields import AceEditorField
 
 User = get_user_model()
 
@@ -214,5 +215,5 @@ class EditorSnippet(models.Model):
         max_length=50, choices=MODE_CHOICES, default="html"
     )
     tags = TaggableManager(blank=True)
-    snippet = models.TextField()
+    snippet = AceEditorField()
     public = models.BooleanField(default=False)

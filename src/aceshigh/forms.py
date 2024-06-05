@@ -47,6 +47,3 @@ class EditorSnippetForm(forms.ModelForm):
     class Meta:
         model = EditorSnippet
         fields = ["title", "mode", "tags", "snippet", "public"]
-        widgets = {
-            "snippet": forms.Textarea(attrs={"rows": 10}),
-        }

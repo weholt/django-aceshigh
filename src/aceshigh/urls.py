@@ -4,7 +4,7 @@ from . import views
 app_name = "aceshigh"
 
 urlpatterns = [
-    path("profile/", views.edit_profile, name="edit_profile"),
+    path("", views.edit_profile, name="edit_profile"),
     path("mode_profile/add/", views.add_mode_profile, name="add_mode_profile"),
     path("mode_profile/edit/<int:mode_profile_id>/", views.edit_mode_profile, name="edit_mode_profile"),
     path(
