@@ -1,5 +1,7 @@
 # AcesHigh
 
+![AcesHigh](assets/images/logo.png)
+
 AcesHigh is a Django application designed to integrate the ACE editor into Django forms seamlessly.
 
 ## Features
@@ -18,6 +20,17 @@ AcesHigh is a Django application designed to integrate the ACE editor into Djang
 - django-taggit
 - djangorestframework
 - drf-yasg
+
+## Screenshots
+
+![AcesHigh](assets/images/screenshot.png)
+You can define default settings for ACE Editors, like font-size, theme & custom CSS.
+
+![AcesHigh](assets/images/screenshot1.png)
+You can define snippets with fancy autocomplete for faster coding.
+
+![AcesHigh](assets/images/screenshot2.png)
+You can specify specific theme, font-size and css per mode.
 
 ## Installation
 1. Install the package:
