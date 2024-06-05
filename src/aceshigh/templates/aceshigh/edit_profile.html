@@ -4,90 +4,111 @@
 {% block title %}Edit Profile{% endblock %}
 {% block content %}
 <div class="container my-5">
-    <div class="text-center mb-4">
-        <a href="{% url 'aceshigh:edit_profile' %}"><img src="{% static 'aceshigh/images/logo.png' %}" alt="AcesHigh Logo" style="max-width: 150px;"></a>
+    <div class="text-center mb-5">
+        <a href="{% url 'aceshigh:edit_profile' %}"><img src="{% static 'aceshigh/images/logo.png' %}"
+                alt="AcesHigh Logo" style="max-width: 150px;"></a>
         <h1 class="display-4 mt-3">AcesHigh Editor Profile</h1>
         <p class="lead">Customize your editing experience with ACE Editor settings.</p>
     </div>
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card shadow-sm mb-5">
+
+    <div class="row">
+        <div class="col-6   d-flex align-items-stretch">
+            <div class="card w-100 shadow-sm mb-5">
                 <div class="card-body">
-                    <h2 class="card-title">Default Profile Settings</h2>
+                    <h2 class="card-title mb-3">Default Profile Settings</h2>
                     <form method="post">
                         {% csrf_token %}
                         {{ form|crispy }}
                         <div class="text-end">
-                            <button type="submit" class="btn btn-primary">Save</button>
+                            <button type="submit" style="width: 10rem;" class="btn btn-primary">Save</button>
                         </div>
                     </form>
                 </div>
             </div>
+        </div>
+        <div class="col-6   d-flex align-items-stretch">
+            <div class="card w-100 shadow-sm mb-5">
+                <div class="card-body">
+                    <h2>Mode Profiles</h2>
+                    <div class="text-end mb-3">
+                        <a href="{% url 'aceshigh:add_mode_profile' %}" class="btn btn-success">Add mode profile</a>
+                    </div>
+                    <ul class="list-group mb-4">
+                        {% for mode_profile in mode_profiles %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <div>
+                                <h5 class="mb-1"><span style="width: 20em;">{{ mode_profile.mode }}</span> <span
+                                        class="mx-2 fs-6 text-muted">({{mode_profile.font_size}}px - {{ mode_profile.theme }})</span></h5>
+                            </div>
+                            <div>
+                                <a href="{% url 'aceshigh:edit_mode_profile' mode_profile.id %}"
+                                    class="btn btn-warning btn-sm">Edit</a>
+                                <form action="{% url 'aceshigh:delete_mode_profile' mode_profile.id %}" method="post"
+                                    class="d-inline">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                </form>
+                            </div>
+                        </li>
+                        {% endfor %}
+                    </ul>
 
-            <h2>Mode Profiles</h2>
-            <div class="text-end mb-3">
-                <a href="{% url 'aceshigh:add_mode_profile' %}" class="btn btn-success">Add mode profile</a>
-            </div>
-            <ul class="list-group mb-4">
-                {% for mode_profile in mode_profiles %}
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <div>
-                            <h5 class="mb-1"><span style="width: 20em;">{{ mode_profile.mode }}</span> <span class="mx-2 fs-6 text-muted">({{mode_profile.font_size}}px - {{ mode_profile.theme }})</span></h5>
+                    <h2 class="mt-5 mb-3">Snippets</h2>
+                    <form method="get" class="mb-4">
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Search snippets..." name="q"
+                                value="{{ search_query|default:'' }}">
+                            <button class="btn btn-outline-secondary" type="submit">Search</button>
                         </div>
-                        <div>
-                            <a href="{% url 'aceshigh:edit_mode_profile' mode_profile.id %}" class="btn btn-warning btn-sm">Edit</a>
-                            <form action="{% url 'aceshigh:delete_mode_profile' mode_profile.id %}" method="post" class="d-inline">
-                                {% csrf_token %}
-                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-                            </form>
-                        </div>
-                    </li>
-                {% endfor %}
-            </ul>
+                    </form>
+                    <div class="text-end mb-3">
+                        <a href="{% url 'aceshigh:add_snippet' %}" class="btn btn-success">Add Snippet</a>
+                        <a href="{% url 'aceshigh:import_snippets' %}" class="btn btn-info">Import Snippets</a>
+                        <a href="{% url 'aceshigh:export_snippets' %}" class="btn btn-secondary">Export Snippets</a>
+                    </div>
+                    <div class="tag-cloud">
+                        {% for tag, count in tag_cloud.items %}
+                        <a href="?q={{ tag }}" class="badge badge-primary mx-2" style="font-size: 14px;">{{ tag }}</a>
+                        {% endfor %}
+                    </div>
 
-            <h2 class="mt-5 mb-3">Snippets</h2>
-            <form method="get" class="mb-4">
-                <div class="input-group">
-                    <input type="text" class="form-control" placeholder="Search snippets..." name="q" value="{{ search_query|default:'' }}">
-                    <button class="btn btn-outline-secondary" type="submit">Search</button>
-                </div>
-            </form>
-            <div class="text-end mb-3">
-                <a href="{% url 'aceshigh:add_snippet' %}" class="btn btn-success">Add Snippet</a>
-                <a href="{% url 'aceshigh:import_snippets' %}" class="btn btn-info">Import Snippets</a>
-                <a href="{% url 'aceshigh:export_snippets' %}" class="btn btn-secondary">Export Snippets</a>
-            </div>
-            <div class="tag-cloud">
-                {% for tag, count in tag_cloud.items %}
-                    <a href="?q={{ tag }}" class="badge badge-primary mx-2" style="font-size: 14px;">{{ tag }}</a>
-                {% endfor %}
-            </div>
-
-            <ul class="list-group mb-4">
-                {% for snippet in snippets %}
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <div>
-                            <h5 class="mb-1">{{ snippet.title }}</h5>
-                            <small>{{ snippet.mode }}</small>
-                            <p class="mb-1">
-                                {% for tag in snippet.tags.all %}
+                    <ul class="list-group mb-4">
+                        {% for snippet in snippets %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <div>
+                                <h5 class="mb-1">{{ snippet.title }}</h5>
+                                <small>{{ snippet.mode }}</small>
+                                <p class="mb-1">
+                                    {% for tag in snippet.tags.all %}
                                     <a href="?q={{ tag }}" class="badge badge-primary mx-2">{{ tag.name }}</a>
-                                {% endfor %}
-                            </p>
-                        </div>
-                        <div>
-                            <a href="{% url 'aceshigh:edit_snippet' snippet.id %}" class="btn btn-warning btn-sm">Edit</a>
-                            <form action="{% url 'aceshigh:delete_snippet' snippet.id %}" method="post" class="d-inline">
-                                {% csrf_token %}
-                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-                            </form>
-                        </div>
-                    </li>
-                {% endfor %}
-            </ul>
+                                    {% endfor %}
+                                </p>
+                            </div>
+                            <div>
+                                <a href="{% url 'aceshigh:edit_snippet' snippet.id %}"
+                                    class="btn btn-warning btn-sm">Edit</a>
+                                <form action="{% url 'aceshigh:delete_snippet' snippet.id %}" method="post"
+                                    class="d-inline">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                </form>
+                            </div>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-md-12">
+
             <footer class="mt-5 text-center">
-                <p><a href="https://github.com/weholt/aceshigh">Source Code</a> | <a href="https://weholt.org">Weholt Development Labs</a></p>
-                <p>This project is licensed under the GNU Affero General Public License v3.0 or later (AGPL-3.0-or-later).</p>
+                <p><a href="https://github.com/weholt/aceshigh">Source Code</a> | <a href="https://weholt.org">Weholt
+                        Development Labs</a></p>
+                <p>This project is licensed under the GNU Affero General Public License v3.0 or later
+                    (AGPL-3.0-or-later).</p>
             </footer>
         </div>
 

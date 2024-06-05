@@ -75,3 +75,93 @@ This project is licensed under the GNU Affero General Public License v3.0 or lat
 
 ## Credits
 - [ACE Editor](https://github.com/ajaxorg/ace)
+
+## Usage Examples
+
+### Example 1: Using the Custom Field in a Model
+
+Define a model using the custom `AceEditorField`:
+
+```python
+# filename: models.py
+
+from django.db import models
+from .fields import AceEditorField
+
+class YourModel(models.Model):
+    content = AceEditorField()
+```
+
+### Example 2: Using the Custom Widget in a Form
+
+Create a form using the custom widget:
+
+```python
+# filename: forms.py
+
+from django import forms
+from .models import YourModel
+
+class YourModelForm(forms.ModelForm):
+    class Meta:
+        model = YourModel
+        fields = '__all__'
+```
+
+### Example 3: Registering the Model in the Admin
+
+Register the model in the admin to use the custom widget:
+
+```python
+# filename: admin.py
+
+from django.contrib import admin
+from .models import YourModel
+
+class YourModelAdmin(admin.ModelAdmin):
+    pass
+
+admin.site.register(YourModel, YourModelAdmin)
+```
+
+### Example 4: Using the Custom Widget in a Template
+
+Render the form in a template:
+
+```html
+<!-- filename: template.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Django Ace Editor with Crispy Forms</title>
+    <style>
+        .ace-editor {
+            height: 200px;
+            width: 100%;
+            margin-bottom: 20px;
+            position: relative;
+        }
+        .fullscreen-icon {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            cursor: pointer;
+        }
+    </style>
+    {% load static %}
+    {% load crispy_forms_tags %}
+</head>
+<body>
+    <h1>My Form with Ace Editor</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <button type="submit">Submit</button>
+    </form>
+</body>
+</html>
+```
+

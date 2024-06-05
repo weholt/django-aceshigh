@@ -1,3 +1,5 @@
+from django.http import JsonResponse
+
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
@@ -166,3 +168,46 @@ def import_snippets(request):
             snippet.tags.add(*snippet_data["tags"])
         return redirect("aceshigh:edit_profile")
     return render(request, "aceshigh/import_snippets.html")
+
+
+@login_required
+def get_editor_configurations(request):
+    default_profile = EditorProfile.objects.filter(user=request.user).first()
+    if not default_profile:
+        return {}
+    
+    snippets = default_profile.enable_snippets and EditorSnippet.objects.filter(user=request.user) or []
+    editor_configurations = {
+        'default': {
+            'theme': f"ace/theme/{default_profile.default_theme}", 
+            'font-size': default_profile.default_font_size,
+            'snippets': [
+                {
+                    'trigger': snippet.title,
+                    'content': snippet.snippet.split("\n")
+                }
+                for snippet in snippets
+            ],
+            'style': default_profile.default_editor_css
+        }
+    }
+
+    mode_profiles = EditorModeProfile.objects.filter(user=request.user)
+    for mode_profile in mode_profiles:
+        editor_configurations[mode_profile.mode] = {
+            'theme': f"ace/theme/{mode_profile.theme}",
+            'font-size': mode_profile.font_size,
+            'snippets': [
+                {
+                    'trigger': snippet.title,
+                    'content': snippet.snippet.split("\n")
+                }
+                for snippet in snippets
+                if snippet.mode == mode_profile.mode
+            ],
+            'style': mode_profile.editor_css
+        }
+
+    import pprint
+    pprint.pprint(editor_configurations)
+    return JsonResponse(editor_configurations)

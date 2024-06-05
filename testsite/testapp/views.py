@@ -1,6 +1,13 @@
 from django import forms
 from django.shortcuts import render
 
+from .models import YourModel
+
+class YourModelForm(forms.ModelForm):
+    class Meta:
+        model = YourModel
+        fields = "__all__"
+
 
 class TestForm(forms.Form):
     title = forms.CharField()
@@ -14,6 +21,6 @@ def home(request):
             print(form.cleaned_data)
         
     template_name = "home.html"
-    context = {"form": TestForm()}
+    context = {"form": TestForm(), "form2": YourModelForm()}
     return render(request, template_name, context)
     

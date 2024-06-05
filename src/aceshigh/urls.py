@@ -18,4 +18,5 @@ urlpatterns = [
     path("snippets/export/", views.export_snippets, name="export_snippets"),
     path("snippets/import/", views.import_snippets, name="import_snippets"),
     path("snippets/public/", views.public_snippets, name="public_snippets"),
+    path('editor-configurations/', views.get_editor_configurations, name='editor-configurations'),
 ]

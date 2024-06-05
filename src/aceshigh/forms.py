@@ -35,12 +35,10 @@ class EditorModeProfileForm(forms.ModelForm):
     
     def clean(self):
         cleaned_data = super().clean()
-        if self.instance:
-            return cleaned_data
-        
+        item_count = self.instance.pk and 1 or 0        
         mode = cleaned_data.get("mode")
         if mode:
-            if EditorModeProfile.objects.filter(user=self.user, mode=mode).exists():
+            if EditorModeProfile.objects.filter(user=self.user, mode=mode).count() > item_count:
                 raise ValidationError(f"Mode '{mode}' already exists")
         return cleaned_data
 

@@ -195,13 +195,7 @@ class EditorProfile(models.Model):
     default_font_size = models.IntegerField(choices=FONT_SIZE_CHOICES, default=14)
     default_theme = models.CharField(max_length=50, choices=THEME_CHOICES, default="github")
     default_mode = models.CharField(max_length=50, choices=MODE_CHOICES, default="html")
-    default_editor_css = models.TextField(
-        default="""#editor { 
-        width: 100%; 
-        height: 500px;
-    }
-    """
-    )
+    default_editor_css = models.CharField(max_length=200, default="width: 100%;  height: 500px;", null=True, blank=True)
     enable_snippets = models.BooleanField(default=False)
 
 
@@ -210,13 +204,7 @@ class EditorModeProfile(models.Model):
     mode = models.CharField(max_length=50, choices=MODE_CHOICES)
     font_size = models.IntegerField(choices=FONT_SIZE_CHOICES, default=14)
     theme = models.CharField(max_length=50, choices=THEME_CHOICES, default="github")
-    editor_css = models.TextField(null=True, blank=True,
-        default="""#editor { 
-        width: 100%; 
-        height: 500px;
-    }
-    """
-    )
+    editor_css = models.CharField(max_length=200, default="width: 100%;  height: 500px;", null=True, blank=True)
 
 
 class EditorSnippet(models.Model):
