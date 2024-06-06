@@ -27,6 +27,7 @@ Current version is 0.1.0 and considered pre-alpha.
 
 ## Screenshots
 
+### Django 
 ![AcesHigh](assets/images/screenshot.png)
 You can define default settings for ACE Editors, like font-size, theme & custom CSS.
 
@@ -36,6 +37,7 @@ You can define snippets with fancy autocomplete for faster coding.
 ![AcesHigh](assets/images/screenshot2.png)
 You can specify specific theme, font-size and css per mode.
 
+### Wagtail
 ![AcesHigh](assets/images/wagtail_1.png)
 You can use the editor as a model field in Wagtail as well.
 
@@ -46,6 +48,7 @@ There is three icons above each editor:
 2) Clicking on the gear icon will take you to the edit page of the editor mode profile
 3) Clicking on the expanding arrows enter fullscreen mode.
 
+## API
 ![Snippet API](assets/images/api.png)
 
 ## Installation
