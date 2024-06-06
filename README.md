@@ -97,6 +97,7 @@ Besides the ACE editor project itself, no code was used (so far) from any of the
 - BUG: Going fullscreen makes the snippets appear behind the editor
 - BUG: Keybinding does not work yet.
 - Missing feature: Wagtail streamfield is not working, but coming soon.
+- Missing feature: custom fonts
 
 ## Usage Examples
 

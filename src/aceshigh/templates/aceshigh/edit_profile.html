@@ -40,8 +40,10 @@
                         {% for mode_profile in mode_profiles %}
                         <li class="list-group-item d-flex justify-content-between align-items-center my-2 shadow-sm">
                             <div>
-                                <a class="text-decoration-none" href="{% url 'aceshigh:edit_mode_profile' mode_profile.id %}"><h5 class="mb-1"><span class="text-uppercase" style="width: 20em;">{{ mode_profile.mode }}</span> <span
-                                        class="mx-2 fs-6 text-muted">({{mode_profile.font_size}}px - {{ mode_profile.theme }})</span></h5></a>
+                                <a class="text-decoration-none" href="{% url 'aceshigh:edit_mode_profile' mode_profile.id %}">
+                                    <div class="mb-1 h5 text-uppercase">{{ mode_profile.mode }}</div>
+                                    <div class="text-muted small">{{mode_profile.font_size}}px - {{ mode_profile.theme|title }}</div>
+                                </a>
                             </div>
                             <div class="text-end">
                                 <a href="{% url 'aceshigh:edit_mode_profile' mode_profile.id %}"
