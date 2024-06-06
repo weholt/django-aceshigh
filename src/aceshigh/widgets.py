@@ -21,7 +21,9 @@ class BaseAceEditorWidget(forms.Textarea):
         text_area_html = super().render(name, value, attrs, renderer)
         editor_id = attrs['id'] if 'id' in attrs else name
         editor_configurations_url = reverse_lazy('aceshigh:editor-configurations')
-        icon = static('aceshigh/images/arrows-fullscreen.svg')
+        editor_profiles_url = reverse_lazy('aceshigh:edit_profile')
+        fullscreen_icon = static('aceshigh/images/arrows-fullscreen.svg')
+        settings_icon = static('aceshigh/images/gear.svg')
         snippets_js = "\n".join([f"snippet {s['trigger']}\n\t{s['content']}" for s in self.snippets])
         editor_html = f'''
             <div id="editor_box_{editor_id}" style="position: relative; width: 100%;">
@@ -59,11 +61,12 @@ class BaseAceEditorWidget(forms.Textarea):
                                 editorDiv.style.cssText += config['style'];
                             }}
 
-                            var img = document.createElement('img');
-                            img.src = '{icon}';
-                            img.classList.add('fullscreen-icon');
-                            img.style="position: absolute; top: -20px; right: 5px; cursor: pointer;";
                             var imageContainer = document.getElementById('editor_box_{editor_id}');
+
+                            var img = document.createElement('img');
+                            img.src = '{fullscreen_icon}';
+                            img.classList.add('fullscreen-icon');
+                            img.style="position: absolute; top: -20px; right: 5px; cursor: pointer;";                            
                             imageContainer.insertBefore(img, imageContainer.firstChild);                                                        
                             img.addEventListener('click', function() {{
                                 if (!document.fullscreenElement) {{
@@ -75,6 +78,17 @@ class BaseAceEditorWidget(forms.Textarea):
                                 }}
                             }});
 
+                            var img_editor_profile = document.createElement('img');
+                            img_editor_profile.src = '{settings_icon}';
+                            img_editor_profile.style="position: absolute; top: -20px; right: 30px; cursor: pointer;";
+                            imageContainer.insertBefore(img_editor_profile, imageContainer.firstChild);    
+                            img_editor_profile.addEventListener('click', function() {{
+                                window.open(
+                                    '{editor_profiles_url}',
+                                    '_blank'
+                                );
+                            }})                                                    
+                                    
                             var snippetManager = ace.require('ace/snippets').snippetManager;
                             var snippetText = (config.snippets || []).map(snippet => {{
                                 var text = snippet.content.join('\\n\t');

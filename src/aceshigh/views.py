@@ -1,5 +1,4 @@
-from django.http import JsonResponse
-
+from django.http import JsonResponse, HttpResponseForbidden
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, JsonResponse
@@ -32,9 +31,11 @@ def edit_profile(request):
     else:
         form = EditorProfileForm(instance=profile)
 
+    wagtail_source = False #request.GET.get('wagtail', request.POST.get('wagtail'), False)
+    template = wagtail_source and 'wagtailadmin/wagtail_editor_profile.html' or "aceshigh/edit_profile.html"
     return render(
         request,
-        "aceshigh/edit_profile.html",
+        template,
         {
             "form": form,
             "snippets": snippets,
@@ -210,3 +211,4 @@ def get_editor_configurations(request):
     #import pprint
     #pprint.pprint(editor_configurations)
     return JsonResponse(editor_configurations)
+

@@ -1,0 +1,38 @@
+{% extends "wagtailadmin/base.html" %}
+
+{% load static %}
+
+{% block content %}
+  <h1>Editor Profile Settings</h1>
+  {% if success %}
+    <p class="success">Settings saved successfully!</p>
+  {% endif %}
+  <form method="post">
+    {% csrf_token %}
+    <div class="field">
+      <label for="editor_mode">Editor Mode</label>
+      <select id="editor_mode" name="editor_mode">
+        {% for value, label in editor_modes %}
+          <option value="{{ value }}" {% if value == current_mode %}selected{% endif %}>{{ label }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="field">
+      <label for="editor_theme">Editor Theme</label>
+      <select id="editor_theme" name="editor_theme">
+        {% for value, label in editor_themes %}
+          <option value="{{ value }}" {% if value == current_theme %}selected{% endif %}>{{ label }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="field">
+      <label for="editor_font_size">Editor Font Size</label>
+      <select id="editor_font_size" name="editor_font_size">
+        {% for value in range(8, 33, 2) %}
+          <option value="{{ value }}" {% if value == current_font_size %}selected{% endif %}>{{ value }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <button type="submit" class="button">Save Settings</button>
+  </form>
+{% endblock %}
