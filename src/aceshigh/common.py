@@ -181,3 +181,12 @@ MODE_CHOICES = [
     ("xquery", "XQuery"),
     ("yaml", "YAML"),
 ]
+
+KEYBINDIMG_CHOICES = [
+    ('ace/keyboard/vscode', 'VS Code'),
+    ('ace/keyboard/vim', 'Vim'),
+    ('ace/keyboard/emacs', 'Emacs'),
+    ('ace/keyboard/sublime', 'Sublime'),
+    ('ace/keyboard/eclipse', 'Eclipse'),
+    ('ace/keyboard/textmate', 'TextMate'),        
+]

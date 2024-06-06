@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "aceshigh/base.html" %}
 {% load static %}
 {% block title %}Import Snippets{% endblock %}
 {% block content %}
@@ -17,7 +17,9 @@
             <input type="file" class="form-control" id="file" name="file" accept=".json">
         </div>
         <div class="text-end">
-            <button type="submit" class="btn btn-primary">Import</button>
+            <button style="width: 200px;" type="submit" class="btn btn-primary mx-3">Import</button>
+            <a style="width: 200px;" href="{% url 'aceshigh:edit_profile' %}" class="btn btn-secondary">Cancel</a>
+
         </div>
     </form>
 </div>

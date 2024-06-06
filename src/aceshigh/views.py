@@ -27,6 +27,8 @@ def edit_profile(request):
         form = EditorProfileForm(request.POST, instance=profile)
         if form.is_valid():
             form.save()
+            if next := request.POST.get('next'):
+                return redirect(next)
             return redirect("aceshigh:edit_profile")
     else:
         form = EditorProfileForm(instance=profile)
@@ -41,7 +43,8 @@ def edit_profile(request):
             "snippets": snippets,
             "search_query": search_query,
             "tag_cloud": tag_cloud,
-            "mode_profiles": mode_profiles
+            "mode_profiles": mode_profiles,
+            "next": request.GET.get("next"),
         },
     )
 
@@ -54,6 +57,8 @@ def add_mode_profile(request):
             mode_profile = form.save(commit=False)
             mode_profile.user = request.user
             mode_profile.save()
+            if next := request.POST.get('next'):
+                return redirect(next)
             return redirect("aceshigh:edit_profile")
         
     return render(request, "aceshigh/add_mode_profile.html", {"form": form})
@@ -65,10 +70,12 @@ def edit_mode_profile(request, mode_profile_id):
         form = EditorModeProfileForm(data=request.POST, user=request.user, instance=mode_profile)
         if form.is_valid():
             form.save()
+            if next := request.POST.get('next'):
+                return redirect(next)
             return redirect("aceshigh:edit_profile")
     else:
         form = EditorModeProfileForm(instance=mode_profile)
-    return render(request, "aceshigh/edit_mode_profile.html", {"form": form})
+    return render(request, "aceshigh/edit_mode_profile.html", {"form": form, 'next': request.GET.get('next')})
 
 @login_required
 def delete_mode_profile(request, mode_profile_id):
@@ -87,6 +94,8 @@ def add_snippet(request):
             snippet = form.save(commit=False)
             snippet.user = request.user
             snippet.save()
+            if next := request.POST.get('next'):
+                return redirect(next)
             return redirect("aceshigh:edit_profile")
     else:
         form = EditorSnippetForm()
@@ -100,10 +109,12 @@ def edit_snippet(request, snippet_id):
         form = EditorSnippetForm(request.POST, instance=snippet)
         if form.is_valid():
             form.save()
+            if next := request.POST.get('next', None):
+                return redirect(next)
             return redirect("aceshigh:edit_profile")
     else:
         form = EditorSnippetForm(instance=snippet)
-    return render(request, "aceshigh/edit_snippet.html", {"form": form})
+    return render(request, "aceshigh/edit_snippet.html", {"form": form, "next": request.GET.get("next")})
 
 
 @login_required
@@ -181,6 +192,11 @@ def get_editor_configurations(request):
         'default': {
             'theme': f"ace/theme/{default_profile.default_theme}", 
             'font-size': default_profile.default_font_size,
+            'keybinding': default_profile.keybinding, 
+            'enable_basic_autocompletion': default_profile.enable_basic_autocompletion,
+            'enable_live_atocompletion': default_profile.enable_live_atocompletion,
+            'show_gutter': default_profile.show_gutter, 
+            'show_line_numbers': default_profile.show_line_numbers,
             'snippets': [
                 {
                     'trigger': snippet.title,
@@ -195,8 +211,14 @@ def get_editor_configurations(request):
     mode_profiles = EditorModeProfile.objects.filter(user=request.user)
     for mode_profile in mode_profiles:
         editor_configurations[mode_profile.mode] = {
+            'mode_id': mode_profile.id,
             'theme': f"ace/theme/{mode_profile.theme}",
             'font-size': mode_profile.font_size,
+            'keybinding': mode_profile.keybinding, 
+            'enable_basic_autocompletion': mode_profile.enable_basic_autocompletion,
+            'enable_live_atocompletion': mode_profile.enable_live_atocompletion,
+            'show_gutter': mode_profile.show_gutter, 
+            'show_line_numbers': mode_profile.show_line_numbers,
             'snippets': [
                 {
                     'trigger': snippet.title,
@@ -208,7 +230,6 @@ def get_editor_configurations(request):
             'style': mode_profile.editor_css
         }
 
-    #import pprint
-    #pprint.pprint(editor_configurations)
+    import pprint
+    pprint.pprint(editor_configurations)
     return JsonResponse(editor_configurations)
-

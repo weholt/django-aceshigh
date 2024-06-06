@@ -9,7 +9,7 @@ AcesHigh is a Django application designed to integrate the ACE editor into Djang
 - Support for multiple ACE editor themes and modes
 - Snippet management with tagging support
 - Fullscreen editor toggle
-- Snippet search and tag cloud visualization
+- Snippet search
 - Public snippet sharing with an API
 
 ## Requirements
@@ -19,7 +19,11 @@ AcesHigh is a Django application designed to integrate the ACE editor into Djang
 - django-crispy-bootstrap5
 - django-taggit
 - djangorestframework
-- drf-yasg
+
+For use in Wagtail you'll of course have to install Wagtail as well.
+
+## Version
+Current version is 0.1.0 and considered pre-alpha.
 
 ## Screenshots
 
@@ -32,10 +36,22 @@ You can define snippets with fancy autocomplete for faster coding.
 ![AcesHigh](assets/images/screenshot2.png)
 You can specify specific theme, font-size and css per mode.
 
+![AcesHigh](assets/images/wagtail_1.png)
+You can use the editor as a model field in Wagtail as well.
+
+![AcesHigh](assets/images/icons.png)
+There is three icons above each editor:
+1) Click here to see an info panel about the editor; what mode it's using, the theme etc.
+![Info panel](assets/images/info_panel.png)
+2) Clicking on the gear icon will take you to the edit page of the editor mode profile
+3) Clicking on the expanding arrows enter fullscreen mode.
+
+![Snippet API](assets/images/api.png)
+
 ## Installation
 1. Install the package:
     ```bash
-    pip install aceshigh
+    pip install git+https://github.com/weholt/aceshigh.git
     ```
 
 2. Add `aceshigh` and its dependencies to your `INSTALLED_APPS` in `settings.py`:
@@ -46,7 +62,6 @@ You can specify specific theme, font-size and css per mode.
         'crispy_bootstrap5',
         'taggit',
         'rest_framework',
-        'drf_yasg',
         'aceshigh',
     ]
 
@@ -57,37 +72,28 @@ You can specify specific theme, font-size and css per mode.
 3. Include the AcesHigh URLs in your `urls.py`:
     ```python
     from django.urls import include, path
-    from drf_yasg.views import get_schema_view
-    from drf_yasg import openapi
-    from rest_framework import permissions
-
-    schema_view = get_schema_view(
-        openapi.Info(
-            title="AcesHigh API",
-            default_version='v1',
-            description="API for accessing public snippets",
-            contact=openapi.Contact(email="thomas@weholt.org"),
-        ),
-        public=True,
-        permission_classes=(permissions.AllowAny,),
-    )
 
     urlpatterns = [
         ...
         path('aceshigh/', include('aceshigh.urls')),
-        path('api/', include('aceshigh.api_urls')),
-        path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     ]
     ```
-
-## Usage
-- To add the ACE editor to any form, use the `{% ace_editor %}` template tag in your templates.
 
 ## License
 This project is licensed under the GNU Affero General Public License v3.0 or later (AGPL-3.0-or-later).
 
 ## Credits
 - [ACE Editor](https://github.com/ajaxorg/ace)
+- [Wagtail ACE Editor](https://github.com/Nigel2392/wagtail_ace_editor) for inspiration.
+- [django-ace](https://github.com/fdemmer/django-ace) for inspiration.
+- [django-ace (fork)](https://github.com/django-ace/django-ace) for inspiration.
+
+Besides the ACE editor project itself, no code was used (so far) from any of the other projects.
+
+## Known bugs, limitations and planned features
+- BUG: Going fullscreen makes the snippets appear behind the editor
+- BUG: Keybinding does not work yet.
+- Missing feature: Wagtail streamfield is not working, but coming soon.
 
 ## Usage Examples
 
@@ -105,76 +111,26 @@ class YourModel(models.Model):
     content = AceEditorField()
 ```
 
-### Example 2: Using the Custom Widget in a Form
-
-Create a form using the custom widget:
+### Example 2: Using the custom field in Wagtail
 
 ```python
-# filename: forms.py
+from wagtail.models import Page
+from wagtail.admin.panels import FieldPanel
+from aceshigh.fields import AceEditorField
 
-from django import forms
-from .models import YourModel
 
-class YourModelForm(forms.ModelForm):
-    class Meta:
-        model = YourModel
-        fields = '__all__'
+class HomePage(Page):
+    content = AceEditorField(mode='html', null=True, blank=True)
+    css_content = AceEditorField(mode='css', null=True, blank=True)
+    js_content = AceEditorField(mode='javascript', null=True, blank=True)
+    python_content = AceEditorField(mode='python', null=True, blank=True)
+    markdown_content = AceEditorField(mode='markdown', null=True, blank=True)
+
+    content_panels = Page.content_panels + [
+        FieldPanel('content'),
+        FieldPanel('css_content'),
+        FieldPanel('js_content'),
+        FieldPanel('python_content'),
+        FieldPanel('markdown_content'),
+    ]    
 ```
-
-### Example 3: Registering the Model in the Admin
-
-Register the model in the admin to use the custom widget:
-
-```python
-# filename: admin.py
-
-from django.contrib import admin
-from .models import YourModel
-
-class YourModelAdmin(admin.ModelAdmin):
-    pass
-
-admin.site.register(YourModel, YourModelAdmin)
-```
-
-### Example 4: Using the Custom Widget in a Template
-
-Render the form in a template:
-
-```html
-<!-- filename: template.html -->
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Django Ace Editor with Crispy Forms</title>
-    <style>
-        .ace-editor {
-            height: 200px;
-            width: 100%;
-            margin-bottom: 20px;
-            position: relative;
-        }
-        .fullscreen-icon {
-            position: absolute;
-            top: 5px;
-            right: 5px;
-            cursor: pointer;
-        }
-    </style>
-    {% load static %}
-    {% load crispy_forms_tags %}
-</head>
-<body>
-    <h1>My Form with Ace Editor</h1>
-    <form method="post">
-        {% csrf_token %}
-        {{ form|crispy }}
-        <button type="submit">Submit</button>
-    </form>
-</body>
-</html>
-```
-

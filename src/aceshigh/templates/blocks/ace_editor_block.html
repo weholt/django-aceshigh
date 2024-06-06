@@ -2,19 +2,19 @@
     <div class="editor-settings" style="display: none;">
         <label for="{{ id }}-mode">Mode</label>
         <select id="{{ id }}-mode" name="{{ name }}-mode">
-            {% for value, label in settings.ACE_EDITOR_MODES %}
+            {% for value, label in MODE_CHOICES %}
             <option value="{{ value }}" {% if value == block.value.mode %}selected{% endif %}>{{ label }}</option>
             {% endfor %}
         </select>
         <label for="{{ id }}-theme">Theme</label>
         <select id="{{ id }}-theme" name="{{ name }}-theme">
-            {% for value, label in settings.ACE_EDITOR_THEMES %}
+            {% for value, label in THEME_CHOICES %}
             <option value="{{ value }}" {% if value == block.value.theme %}selected{% endif %}>{{ label }}</option>
             {% endfor %}
         </select>
         <label for="{{ id }}-font_size">Font Size</label>
         <select id="{{ id }}-font_size" name="{{ name }}-font_size">
-            {% for value in range(8, 33, 2) %}
+            {% for value in FONT_SIZE_CHOICES %}
             <option value="{{ value }}" {% if value == block.value.font_size %}selected{% endif %}>{{ value }}</option>
             {% endfor %}
         </select>

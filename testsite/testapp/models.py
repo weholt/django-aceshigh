@@ -7,3 +7,4 @@ class YourModel(models.Model):
     description = models.TextField()
     content = AceEditorField()
     code = AceEditorField(theme="ace/theme/dracula", mode="python")
+

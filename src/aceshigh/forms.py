@@ -7,10 +7,8 @@ from django.core.exceptions import ValidationError
 class EditorProfileForm(forms.ModelForm):
     class Meta:
         model = EditorProfile
-        fields = ["default_font_size", "default_theme", "default_mode", "default_editor_css", "enable_snippets"]
-        widgets = {
-            "default_editor_css": forms.Textarea(attrs={"rows": 4}),
-        }
+        fields = ["default_font_size", "default_theme", "default_mode", "default_editor_css", 'keybinding', "enable_snippets", 'enable_basic_autocompletion', 'enable_live_atocompletion', 'show_gutter', 'show_line_numbers']
+    
 
 class ModeValidator(object):
     def __init__(self, user):
@@ -24,10 +22,7 @@ class ModeValidator(object):
 class EditorModeProfileForm(forms.ModelForm):
     class Meta:
         model = EditorModeProfile
-        fields = ["mode", "font_size", "theme", "editor_css"]
-        widgets = {
-            "editor_css": forms.Textarea(attrs={"rows": 4}),
-        }
+        fields = ["mode", "font_size", "theme", "editor_css", 'keybinding', "enable_snippets", 'enable_basic_autocompletion', 'enable_live_atocompletion', 'show_gutter', 'show_line_numbers']
 
     def __init__(self, user=None, *args, **kwargs):
         super().__init__(*args, **kwargs)

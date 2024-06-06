@@ -1,5 +1,6 @@
 from django.urls import path
 from . import views
+from aceshigh import api_views
 
 app_name = "aceshigh"
 
@@ -19,4 +20,5 @@ urlpatterns = [
     path("snippets/import/", views.import_snippets, name="import_snippets"),
     path("snippets/public/", views.public_snippets, name="public_snippets"),
     path('editor-configurations/', views.get_editor_configurations, name='editor-configurations'),
+    path("api/snippets/", api_views.PublicSnippetList.as_view(), name="public_snippet_list"),
 ]
