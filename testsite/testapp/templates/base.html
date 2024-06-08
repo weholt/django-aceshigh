@@ -1,4 +1,4 @@
-{% load static %}
+{% load static aceshigh_tags %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -6,26 +6,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{% block title %}Aces High{% endblock %}</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.3/dist/journal/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" crossorigin="anonymous">
-  <link href="{% static 'aceshigh/css/style.css' %}">
+  {% aceshigh_imports %}
   {% block extra_head %}{% endblock %}    
-  <script>
-    function getCookie(name) {
-      let cookieValue = null;
-      if (document.cookie && document.cookie !== '') {
-        const cookies = document.cookie.split(';');
-        for (let i = 0; i < cookies.length; i++) {
-          const cookie = cookies[i].trim();
-          if (cookie.substring(0, name.length + 1) === (name + '=')) {
-            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-            break;
-          }
-        }
-      }
-      return cookieValue;
-    }
-  </script>
   {% block extra_style %}{% endblock %}
   <style>
   </style>
@@ -36,8 +18,7 @@
   {% block content %}{% endblock %}
   {% endblock %}
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+  {% aceshigh_scripts %}
   {% block extra_js %}{% endblock %}
 </body>
 

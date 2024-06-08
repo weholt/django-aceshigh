@@ -21,4 +21,7 @@ urlpatterns = [
     path("snippets/public/", views.public_snippets, name="public_snippets"),
     path('editor-configurations/', views.get_editor_configurations, name='editor-configurations'),
     path("api/snippets/", api_views.PublicSnippetList.as_view(), name="public_snippet_list"),
+    path('process-text/', views.process_text, name='process_text'),
+    path('process-modal/', views.process_modal, name='process_modal'),    
+    path('fetch-form/', views.fetch_form, name='fetch-form'),    
 ]

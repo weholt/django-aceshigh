@@ -1,5 +1,4 @@
-{% load static %}
-{% load crispy_forms_tags %}
+{% load static aceshigh_tags crispy_forms_tags %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -7,22 +6,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Django Ace Editor with Crispy Forms</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-    <script src='https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/ace.js'></script>
-    <script src='https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/ext-language_tools.min.js'></script>
-    <script src='https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/mode-snippets.min.js'></script>
-    <style>
-    </style>
+    {% aceshigh_imports %}
+    {% aceshigh_scripts %}
 </head>
 <body>
-<div class="container m-5 p-5"> 
-    <h1>My Model Form with Ace Editor</h1>
-    <form method="post">
-        {% csrf_token %}
-        {{ form2|crispy }}
-        <button type="submit">Submit</button>
-    </form>
-</div>    
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
+    <div class="container m-5 p-5"> 
+        <h1>My Model Form with Ace Editor</h1>
+        <form method="post">
+            {% csrf_token %}
+            {{ form2|crispy }}
+            <button type="submit">Submit</button>
+        </form>
+    </div>    
+    
 </body>
 </html>

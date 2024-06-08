@@ -9,7 +9,9 @@ class BaseAceEditorWidget(forms.Textarea):
             'https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/ace.js',
             'https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/ext-language_tools.min.js',
             'https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/mode-snippets.min.js',
-            "https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/ext-modelist.js"  
+            "https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/ext-modelist.js",  
+            "https://unpkg.com/htmx.org@1.4.1",
+            static('aceshigh/js/system.js'),
         )
 
     def __init__(self, attrs=None, mode='html', theme='github', snippets=None, **kwargs):
@@ -24,19 +26,41 @@ class BaseAceEditorWidget(forms.Textarea):
         editor_configurations_url = reverse_lazy('aceshigh:editor-configurations')
         editor_profiles_url = reverse_lazy('aceshigh:edit_profile')
         editor_mode_profile_url = reverse_lazy('aceshigh:edit_mode_profile', args=[0])
+        process_modal = reverse_lazy('aceshigh:process_modal')
+        process_text = reverse_lazy('aceshigh:process_text')
         fullscreen_icon = static('aceshigh/images/arrows-fullscreen.svg')
         settings_icon = static('aceshigh/images/gear.svg')
         info_icon = static('aceshigh/images/info-circle.svg')
+        system_scripts_url = static('aceshigh/js/system.js')
         system_styles = static('aceshigh/css/system.css')
         snippets_js = "\n".join([f"snippet {s['trigger']}\n\t{s['content']}" for s in self.snippets])
         editor_html = f'''
+
+            <div class="modal fade" id="processModal" tabindex="-1" aria-labelledby="processModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="processModalLabel">Process Selected Text</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body" id="modal-body">
+                            <!-- Form content will be loaded here via htmx -->
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            <button type="button" class="btn btn-primary" id="proceed-button">Proceed</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div id="toast" class="toast"></div>
             <div id="editor_box_{editor_id}" style="position: relative; width: 100%;">
                 <div id="editor_{editor_id}" class="ace-editor">
                 </div>
             </div>
             <script>
-                           
+                                          
                 document.addEventListener("DOMContentLoaded", function() {{
                     fetch('{editor_configurations_url}')
                         .then(response => response.json())
@@ -145,6 +169,82 @@ class BaseAceEditorWidget(forms.Textarea):
                                 textarea.value = editor.getValue();
                             }});
 
+                            editor.commands.addCommand({{
+                                name: 'processSelectedText',
+                                bindKey: {{win: 'Ctrl-Alt-1', mac: 'Command-Alt-1'}},
+                                exec: function(editor) {{
+                                    const selectedText = editor.getSelectedText();
+                                    if (selectedText) {{
+                                        showProcessModal(selectedText, editor);
+                                    }} else {{
+                                        toast.show("No text selected", 2000);
+                                    }}
+                                }}
+                            }});
+
+                            function showProcessModal(selectedText, editor) {{
+                                const modalBody = document.getElementById('modal-body');
+                                const csrfToken = getCookie('csrftoken');
+                                htmx.ajax('POST', '{process_modal}', {{
+                                    target: '#modal-body',
+                                    headers: {{
+                                        'Content-Type': 'application/json',
+                                        'X-CSRFToken': csrfToken
+                                    }},
+                                    values: {{
+                                        selected_text: selectedText,
+                                        mode: "{self.mode}"
+                                    }}
+                                }});
+
+                                const processModal = new bootstrap.Modal(document.getElementById('processModal'));
+                                processModal.show();
+
+                                // Set up the proceed button to send the selected text and form data
+                                document.getElementById('proceed-button').onclick = function() {{
+                                    const formData = new FormData(document.querySelector('#modal-body form'));
+                                    const formObject = Object.fromEntries(formData.entries());
+                                    formObject.selected_text = selectedText;
+
+                                    fetch('{process_text}', {{
+                                        method: 'POST',
+                                        headers: {{
+                                            'Content-Type': 'application/json',
+                                            'X-CSRFToken': getCookie('csrftoken') // CSRF token for Django
+                                        }},
+                                        body: JSON.stringify(formObject)
+                                    }})
+                                    .then(response => response.json())
+                                    .then(data => {{
+                                        console.log(data)
+                                        const processedText = data.processed_text;
+                                        const range = editor.getSelectionRange();
+                                        editor.session.replace(range, processedText);
+                                        console.log("Text processed successfully", 2000);
+                                        processModal.hide();
+                                    }})
+                                    .catch(error => {{
+                                        console.error('Error:', error);
+                                        toast.show("Error processing text", 2000);
+                                    }});
+                                }};
+                            }}
+
+                            function getCookie(name) {{
+                                let cookieValue = null;
+                                if (document.cookie && document.cookie !== '') {{
+                                    const cookies = document.cookie.split(';');
+                                    for (let i = 0; i < cookies.length; i++) {{
+                                        const cookie = cookies[i].trim();
+                                        if (cookie.substring(0, name.length + 1) === (name + '=')) {{
+                                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                                            break;
+                                        }}
+                                    }}
+                                }}
+                                return cookieValue;
+                            }}                                                        
+                            
                             function showEditorInfoToast(editor) {{
                                 const toast = document.getElementById('toast');
                                 const options = editor.getOptions();
@@ -195,10 +295,12 @@ class BaseAceEditorWidget(forms.Textarea):
                                 setTimeout(() => {{
                                     toast.classList.remove('show-toast');
                                 }}, 10000);
-                            }}                            
+                            }}
+
                         }})
                         .catch(error => console.error('Error fetching configurations:', error));
                 }});
+
             </script>
         '''
         return mark_safe(text_area_html + editor_html)

@@ -1,11 +1,17 @@
+from typing import Self
+from django.http import HttpRequest
 from django.http import JsonResponse, HttpResponseForbidden
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, JsonResponse
 from django.db.models import Count
+from django.views.decorators.csrf import csrf_exempt
+
 from .models import EditorProfile, EditorSnippet, EditorModeProfile
 from .forms import EditorProfileForm, EditorSnippetForm, EditorModeProfileForm
 import json
+
+from .protocols import get_processor_choices, get_processors_classes, get_processor_class
 
 
 @login_required
@@ -230,6 +236,45 @@ def get_editor_configurations(request):
             'style': mode_profile.editor_css
         }
 
-    import pprint
-    pprint.pprint(editor_configurations)
+    #import pprint
+    #pprint.pprint(editor_configurations)
     return JsonResponse(editor_configurations)
+
+@csrf_exempt
+@login_required
+def process_text(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        text = processed_text = data.pop('selected_text', '')
+        option = data.pop('dropdown', None)
+        mode = request.GET.get('mode', None)
+        if processor_klass := get_processor_class(request, option):
+            processor = processor_klass(request)  # type: ignore noqa
+            extra_data = {}
+            if form_klass := processor.get_form_class(mode=mode):
+                form = form_klass(data)
+                if form.is_valid():
+                    extra_data = form.cleaned_data        
+            processed_text = processor.process(text, mode, extra_data)
+            return JsonResponse({'processed_text': processed_text})
+    return JsonResponse({'error': 'Invalid request'}, status=400)
+
+
+@csrf_exempt
+@login_required
+def process_modal(request):
+    selected_text = request.POST.get('selected_text', '')
+    mode = request.POST.get('mode', 'html')
+    return render(request, 'aceshigh/partials/process_modal.html', {'mode': mode,'selected_text': selected_text, 'dropdown_options': get_processor_choices(request)})
+
+@csrf_exempt
+@login_required
+def fetch_form(request):
+    option = request.GET.get('dropdown', None)
+    mode = request.GET.get('mode', None)
+    form = None
+    if processor_klass := get_processor_class(request, option):
+        processor = processor_klass(request)  # type: ignore noqa
+        if form_klass := processor.get_form_class(mode=mode):
+            form = form_klass and form_klass()
+    return render(request, 'aceshigh/partials/fetch_form.html', {'form': form, 'mode': mode})

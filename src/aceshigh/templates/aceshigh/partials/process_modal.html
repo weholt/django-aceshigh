@@ -1,0 +1,20 @@
+{% load static aceshigh_tags crispy_forms_tags %}
+
+<form id="initial-form">
+    <input type="hidden" name="selected_text" value="{{ selected_text }}">
+    <input type="hidden" name="mode" value="{{ mode }}">
+
+    <div class="mb-3">
+        <label for="dropdown" class="form-label">Choose an option:</label>
+        <select class="form-select" id="options-dropdown" name="dropdown"
+                hx-get="{% url 'aceshigh:fetch-form' %}?" + document.getElementById("doptions-dropdown").value hx-target="#form-content" hx-trigger="change">
+            <option value="">Select an option</option>
+            {% for option_value, option_label in dropdown_options %}
+                <option value="{{ option_value }}">{{ option_label }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div id="form-content">
+        <!-- Additional form content will be loaded here -->
+    </div>
+</form>

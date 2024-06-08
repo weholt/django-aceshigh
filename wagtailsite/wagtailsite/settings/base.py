@@ -195,3 +195,18 @@ WAGTAILDOCS_EXTENSIONS = [
 ]
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
+
+
+ACESHIGH = {
+    "processors": {
+        "default": [
+            "home.processors.PersonalGreetingsProcessor",
+            "home.processors.UpperCaseProcessor",
+            "home.processors.HelloWorldProcessor",
+        ],
+        "html": [
+            "home.processors.PersonalGreetingsProcessor",
+            "home.processors.UpperCaseProcessor",
+        ],
+    }
+}
