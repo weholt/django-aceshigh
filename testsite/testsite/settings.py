@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    "aceshigh",
     "testapp",
     "django.contrib.admin",
     "django.contrib.auth",
@@ -42,7 +43,6 @@ INSTALLED_APPS = [
     "crispy_bootstrap5",
     "taggit",
     "rest_framework",
-    "aceshigh",
 ]
 
 MIDDLEWARE = [

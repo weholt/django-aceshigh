@@ -1,4 +1,4 @@
-/* https://github.com/JetBrains/JetBrainsMono */
+/* https://github.com/JetBrains/JetBrainsMono
 @font-face{
     font-family: 'JetBrains Mono';
     src: url('https://yourwebsite.com/fonts/JetBrainsMono-Regular.ttf') format('truetype');
@@ -12,24 +12,126 @@
     font-weight: normal;
     font-style: normal;
 }
+/* filename: static/aceshigh/css/system.css */
+/* .modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 100px;
+    top: 100px;
+    width: 500px;
+    height: 500px;
+    overflow: auto;
+    background-color: rgb(255, 255, 255);
+    color: black
+}
 
-.toast {
+.modal.show {
+    display: block;
+}
+
+.modal-dialog {
+    margin: 10% auto;
+    padding: 20px;
+    width: 80%;
+    max-width: 600px;
+    background: white;
+    border-radius: 5px;
+}
+
+.modal-header, .modal-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-header .btn-close, .modal-footer .btn {
+    cursor: pointer;
+}
+
+.modal-footer .btn-secondary {
+    background-color: #6c757d;
+    color: white;
+}
+
+.modal-footer .btn-primary {
+    background-color: #007bff;
+    color: white;
+} */
+/* 
+.toast-message {
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background-color: rgba(119, 119, 119, 0.8);
-    color: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    font-family: Arial, sans-serif;
-    z-index: 1000;
+    -webkit-transform: translate(-50%, -50%);
+    -moz-transform: translate(-50%, -50%);
+    -o-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    background-color: #00638e;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
     display: none;
-    max-width: 400px;
+    z-index: 9999; 
+}
+*/
+
+.tailwind-modal-show {
+    display: flex;
+}
+
+/* Tailwind modal classes
+.tailwind-modal {
+    display: none;
+}
+
+
+.default-modal-label {
+    font-size: 24pt;
+} */
+
+.toast-message table tbody tr td  {
+    background-color: #00638e;
+    color: white;   
+    border: none;
+}
+
+table.toast-message, table.toast-message th, table.toast-message td {
+    background-color: #00638e;
+    color: white;   
+    border: none;
+}
+
+table.toast-message {
     width: 100%;
+    border-collapse: collapse;
+    border: none;
+}
+
+table.toast-message th, table.toast-message td {
+    padding: 8px;
+    text-align: left;
+    background-color: #00638e;
+    color: white;   
+}
+
+table.toast-message th {
+    background-color: #00638e;
+    color: white;   
+}
+.toast-message-title {
+    font-weight: bold;
     text-align: center;
+    margin-bottom: 10px;
 }
 
 .show-toast {
-    display: block !important;
+    display: block;
+}
+
+.icon {
+    width: 24px;
+    height: 24px;
+    margin: 0 10px;
 }

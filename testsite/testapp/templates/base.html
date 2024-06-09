@@ -7,6 +7,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{% block title %}Aces High{% endblock %}</title>
   {% aceshigh_imports %}
+  {% aceshigh_scripts %}
+  
   {% block extra_head %}{% endblock %}    
   {% block extra_style %}{% endblock %}
   <style>
@@ -18,7 +20,6 @@
   {% block content %}{% endblock %}
   {% endblock %}
 
-  {% aceshigh_scripts %}
   {% block extra_js %}{% endblock %}
 </body>
 

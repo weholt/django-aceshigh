@@ -2,7 +2,7 @@ from django.db import models
 from wagtail.models import Page
 from wagtail.fields import StreamField
 from wagtail.admin.panels import FieldPanel
-from aceshigh.blocks import AceEditorBlock
+#from aceshigh.blocks import AceEditorBlock, AceHtmlBlock
 from aceshigh.fields import AceEditorField
 
 
@@ -21,13 +21,11 @@ class HomePage(Page):
         FieldPanel('markdown_content'),
     ]    
 
-class MyPage(Page):
-    body = StreamField([
-        ('html_editor', AceEditorBlock(mode='html', theme='github', font_size=16)),
-        ('css_editor', AceEditorBlock(mode='css', theme='solarized_light', font_size=12)),
-        ('js_editor', AceEditorBlock(mode='javascript', theme='monokai', font_size=14)),
-    ])
+# class MyPage(Page):
+#     body = StreamField([
+#         ('some_html', AceHtmlBlock()),
+#     ])
 
-    content_panels = Page.content_panels + [
-        FieldPanel('body'),
-    ]    
+#     content_panels = Page.content_panels + [
+#         FieldPanel('body'),
+#     ]    

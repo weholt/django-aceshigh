@@ -1,4 +1,4 @@
-from aceshigh.widgets import BaseAceEditorWidget
+from aceshigh.widgets import AceEditorWidget
 from django import forms
 from django.contrib import admin
 
@@ -9,13 +9,14 @@ class YourModelForm(forms.ModelForm):
     class Meta:
         model = YourModel
         fields = "__all__"
-        widgets = {
-            "content": BaseAceEditorWidget(attrs={"class": "ace-editor"}),
-        }
+        #widgets = {
+        #    "content": AceEditorWidget(attrs={"class": "ace-editor"}),
+        #}
 
 
 class YourModelAdmin(admin.ModelAdmin):
-    form = YourModelForm
+    #form = YourModelForm
+    pass
 
 
 admin.site.register(YourModel, YourModelAdmin)
