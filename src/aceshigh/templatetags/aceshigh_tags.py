@@ -1,23 +1,29 @@
 import time
+
+from aceshigh.models import EditorProfile, EditorSnippet
 from django import template
 from django.template.loader import render_to_string
 from django.templatetags.static import static
-from aceshigh.models import EditorProfile, EditorSnippet
 from django.utils.safestring import mark_safe
 
 register = template.Library()
 
+
 @register.simple_tag
 def aceshigh_imports():
-    return mark_safe(f"""
+    return mark_safe(
+        f"""
     <link href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.3/dist/journal/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" crossorigin="anonymous">
     <link href="{static('aceshigh/css/system.css')}">
-    """)
+    """
+    )
+
 
 @register.simple_tag
 def aceshigh_scripts():
-    return mark_safe(f"""
+    return mark_safe(
+        f"""
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/ace.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/ext-language_tools.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/ext-modelist.js"></script>
@@ -25,7 +31,8 @@ def aceshigh_scripts():
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.min.js" integrity="sha512-ykZ1QQr0Jy/4ZkvKuqWn4iF3lqPZyij9iRv6sGqLRdTPkY69YX6+7wvVGmsdBbiIfN/8OdsI7HABjvEok6ZopQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
-    <script src="{static('aceshigh/js/system.js')}" defer></script>""")
+    <script src="{static('aceshigh/js/system.js')}" defer></script>"""
+    )
 
 
 # @register.simple_tag(takes_context=True)

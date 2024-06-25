@@ -1,15 +1,22 @@
-from django.urls import path
-from . import views
 from aceshigh import api_views
+from django.urls import path
+
+from . import views
 
 app_name = "aceshigh"
 
 urlpatterns = [
     path("", views.edit_profile, name="edit_profile"),
     path("mode_profile/add/", views.add_mode_profile, name="add_mode_profile"),
-    path("mode_profile/edit/<int:mode_profile_id>/", views.edit_mode_profile, name="edit_mode_profile"),
     path(
-        "mode_profile/delete/<int:mode_profile_id>/", views.delete_mode_profile, name="delete_mode_profile"
+        "mode_profile/edit/<int:mode_profile_id>/",
+        views.edit_mode_profile,
+        name="edit_mode_profile",
+    ),
+    path(
+        "mode_profile/delete/<int:mode_profile_id>/",
+        views.delete_mode_profile,
+        name="delete_mode_profile",
     ),
     path("snippet/add/", views.add_snippet, name="add_snippet"),
     path("snippet/edit/<int:snippet_id>/", views.edit_snippet, name="edit_snippet"),
@@ -19,9 +26,17 @@ urlpatterns = [
     path("snippets/export/", views.export_snippets, name="export_snippets"),
     path("snippets/import/", views.import_snippets, name="import_snippets"),
     path("snippets/public/", views.public_snippets, name="public_snippets"),
-    path('editor-configurations/', views.get_editor_configurations, name='editor-configurations'),
-    path("api/snippets/", api_views.PublicSnippetList.as_view(), name="public_snippet_list"),
-    path('process-text/', views.process_text, name='process_text'),
-    path('process-modal/', views.process_modal, name='process_modal'),    
-    path('fetch-form/', views.fetch_form, name='fetch-form'),    
+    path(
+        "editor-configurations/",
+        views.get_editor_configurations,
+        name="editor-configurations",
+    ),
+    path(
+        "api/snippets/",
+        api_views.PublicSnippetList.as_view(),
+        name="public_snippet_list",
+    ),
+    path("process-text/", views.process_text, name="process_text"),
+    path("process-modal/", views.process_modal, name="process_modal"),
+    path("fetch-form/", views.fetch_form, name="fetch-form"),
 ]

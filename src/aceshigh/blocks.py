@@ -9,10 +9,10 @@
 
 
 # class AceHtmlBlock(blocks.FieldBlock):
-    
+
 #     blocks = blocks.Block()
 
-#     def __init__(self, **kwargs):        
+#     def __init__(self, **kwargs):
 #         super().__init__(blocks=('text', blocks.TextBlock()), **kwargs)
 
 #     def get_template(self, value=None, context=None) -> str | None:
@@ -23,7 +23,7 @@
 #     @cached_property
 #     def field(self):
 #         return AceEditorField()
-    
+
 #     class Meta:
 #         icon = "code"
 #         label = _("Ace HTML Editor")
@@ -70,7 +70,7 @@
 #         context["id"]    = f"{prefix}-{self.meta.label}"
 #         context.update(**self.field_options)
 #         return context
-    
+
 #     @cached_property
 #     def field(self):
 #         return AceEditorField(**self.field_options)

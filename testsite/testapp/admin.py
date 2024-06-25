@@ -9,13 +9,13 @@ class YourModelForm(forms.ModelForm):
     class Meta:
         model = YourModel
         fields = "__all__"
-        #widgets = {
+        # widgets = {
         #    "content": AceEditorWidget(attrs={"class": "ace-editor"}),
-        #}
+        # }
 
 
 class YourModelAdmin(admin.ModelAdmin):
-    #form = YourModelForm
+    # form = YourModelForm
     pass
 
 
